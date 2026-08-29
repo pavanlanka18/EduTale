@@ -1,15 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Play, Plus, Flame, BookOpen, Clock, ArrowRight, Heart } from 'lucide-react';
+import { Sparkles, Play, Plus, Flame, BookOpen, Clock, ArrowRight } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { Card } from '../components/ui/Card';
 import { storageService, INTEREST_OPTIONS } from '../services/apiService';
+import { authService } from '../services/authService';
 import { Story, StudentProfile } from '../types';
 
 export const DashboardPage: React.FC = () => {
   const profile: StudentProfile = storageService.getSavedProfile();
+  const currentUser = authService.getUser();
   const stories: Story[] = storageService.getStories();
+
+  const displayName = currentUser?.full_name || profile.name || currentUser?.email?.split('@')[0] || 'Learner';
 
   const activeStory = stories[0];
 
@@ -26,7 +30,7 @@ export const DashboardPage: React.FC = () => {
             </div>
 
             <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-              Good afternoon, {profile.name || 'Alex'} 👋
+              Good afternoon, {displayName} 👋
             </h1>
             <p className="text-purple-100 text-sm sm:text-base leading-relaxed">
               Ready for your next personalized lesson? You have learned <span className="font-extrabold text-white underline">{stories.length} stories</span> adapted to {profile.grade}.

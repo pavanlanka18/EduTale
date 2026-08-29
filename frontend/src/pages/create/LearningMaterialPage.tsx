@@ -5,6 +5,7 @@ import { Button } from '../../components/ui/Button';
 import { ProgressStepper } from '../../components/ui/ProgressStepper';
 import { Badge } from '../../components/ui/Badge';
 import { LearningMaterial } from '../../types';
+import { storageService } from '../../services/apiService';
 
 export const LearningMaterialPage: React.FC = () => {
   const navigate = useNavigate();
@@ -33,19 +34,12 @@ export const LearningMaterialPage: React.FC = () => {
     }
   };
 
-  const processFile = (file: File) => {
+  const processFile = async (file: File) => {
     setUploadedFile(file);
     setIsProcessing(true);
-    setTimeout(() => {
-      setIsProcessing(false);
-      setExtractedData({
-        type: activeTab,
-        name: file.name,
-        extractedTopic: "Food Chains & Energy Flow",
-        extractedConcepts: ["Producers & Solar Energy", "Primary Consumers", "Apex Predators", "Nutrient Loops"],
-        fileSize: `${(file.size / 1024).toFixed(1)} KB`
-      });
-    }, 1500);
+    const extracted = await storageService.uploadFileAndExtract(file);
+    setIsProcessing(false);
+    setExtractedData(extracted);
   };
 
   const handleTextSubmit = () => {

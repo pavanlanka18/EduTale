@@ -274,7 +274,7 @@ export const LandingPage: React.FC = () => {
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-slate-100">
                   <div>
                     <span className="text-xs font-bold text-brand-600 uppercase tracking-wider">Learner Profile</span>
-                    <h3 className="text-2xl font-extrabold text-slate-900 mt-1">Alex • 10 Years Old</h3>
+                    <h3 className="text-2xl font-extrabold text-slate-900 mt-1">Student • Grade 5</h3>
                     <p className="text-sm text-slate-500 font-medium">Grade 5 • Loves Animals & Jungle Adventures</p>
                   </div>
                   <div className="bg-emerald-100 text-emerald-800 font-bold px-4 py-2 rounded-2xl text-xs flex items-center gap-1.5">

@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, User, Sparkles } from 'lucide-react';
+import { ArrowRight, User } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { InterestCard } from '../../components/ui/InterestCard';
 import { ProgressStepper } from '../../components/ui/ProgressStepper';
 import { INTEREST_OPTIONS, GRADE_OPTIONS, storageService } from '../../services/apiService';
+import { authService } from '../../services/authService';
 import { StudentProfile } from '../../types';
 
 export const StudentProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const initialProfile = storageService.getSavedProfile();
+  const currentUser = authService.getUser();
 
-  const [name, setName] = useState(initialProfile.name || 'Alex');
+  const [name, setName] = useState(
+    currentUser?.full_name || initialProfile.name || currentUser?.email?.split('@')[0] || ''
+  );
   const [age, setAge] = useState<number>(initialProfile.age || 10);
   const [grade, setGrade] = useState<string>(initialProfile.grade || 'Grade 5');
   const [selectedInterests, setSelectedInterests] = useState<string[]>(
@@ -24,7 +28,7 @@ export const StudentProfilePage: React.FC = () => {
     );
   };
 
-  const handleNext = (e: React.FormEvent) => {
+  const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     const updatedProfile: StudentProfile = {
       name,
@@ -33,31 +37,27 @@ export const StudentProfilePage: React.FC = () => {
       interests: selectedInterests.length > 0 ? selectedInterests : ['animals'],
     };
     storageService.saveProfile(updatedProfile);
-    navigate('/create/material');
+    navigate('/dashboard');
   };
 
-  const steps = [
-    { id: 1, label: 'Profile' },
-    { id: 2, label: 'Material' },
-    { id: 3, label: 'Story AI' },
-    { id: 4, label: 'Learn' },
-  ];
+  const handleDiscard = () => {
+    navigate('/dashboard');
+  };
 
   return (
     <div className="min-h-screen bg-surface-bg py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-8">
-        <ProgressStepper steps={steps} currentStep={1} />
 
         <div className="text-center max-w-2xl mx-auto space-y-3">
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
-            Let's make this story yours ✨
+            Customize Student Profile ✨
           </h1>
           <p className="text-slate-600 text-sm sm:text-base">
-            Tell us about the learner so our AI can customize vocabulary, characters, and visual themes.
+            Update student details and learning preferences saved in your account.
           </p>
         </div>
 
-        <form onSubmit={handleNext} className="bg-white rounded-3xl p-6 sm:p-10 border border-purple-100 shadow-xl space-y-8">
+        <form onSubmit={handleSave} className="bg-white rounded-3xl p-6 sm:p-10 border border-purple-100 shadow-xl space-y-8">
           
           {/* NAME & AGE */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -70,7 +70,7 @@ export const StudentProfilePage: React.FC = () => {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Alex"
+                  placeholder="e.g. Learner Name"
                   required
                   className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none text-slate-800 font-semibold text-sm"
                 />
@@ -147,10 +147,17 @@ export const StudentProfilePage: React.FC = () => {
             </div>
           </div>
 
-          {/* SUBMIT BUTTON */}
-          <div className="pt-4 flex justify-end">
-            <Button size="lg" type="submit" icon={<ArrowRight className="w-5 h-5" />}>
-              Continue to Material →
+          {/* SUBMIT & DISCARD BUTTONS */}
+          <div className="pt-4 flex items-center justify-end gap-3">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={handleDiscard}
+            >
+              Discard Changes
+            </Button>
+            <Button size="lg" type="submit">
+              Save Profile
             </Button>
           </div>
 

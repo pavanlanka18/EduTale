@@ -42,7 +42,9 @@ export const LearnPlayerPage: React.FC = () => {
       synthRef.current = window.speechSynthesis;
     }
     return () => {
-      if (synthRef.current) synthRef.current.cancel();
+      if (synthRef.current) {
+        synthRef.current.cancel();
+      }
     };
   }, []);
 
@@ -71,7 +73,14 @@ export const LearnPlayerPage: React.FC = () => {
     }
   }, [currentSceneIndex, isPlaying, isMuted]);
 
-  // Timer simulation for scene progress
+  // Cancel speech synthesis when unmounting component or navigating away
+  useEffect(() => {
+    return () => {
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (isPlaying && activeScene) {

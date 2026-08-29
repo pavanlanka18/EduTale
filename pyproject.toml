@@ -1,0 +1,9 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["backend", "."]
+addopts = "-v --tb=short"
+markers = [
+    "slow: marks tests as slow",
+    "ocr: marks OCR tests",
+    "rag: marks RAG pipeline tests",
+]

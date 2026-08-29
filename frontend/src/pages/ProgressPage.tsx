@@ -1,13 +1,16 @@
 import React from 'react';
-import { Trophy, Award, CheckCircle2, Flame, BookOpen, Star, Sparkles } from 'lucide-react';
+import { Trophy, Award } from 'lucide-react';
 import { Badge } from '../components/ui/Badge';
 import { Card } from '../components/ui/Card';
 import { storageService } from '../services/apiService';
-import { Story } from '../types';
+import { authService } from '../services/authService';
 
 export const ProgressPage: React.FC = () => {
   const profile = storageService.getSavedProfile();
+  const currentUser = authService.getUser();
   const stories = storageService.getStories();
+
+  const displayName = currentUser?.full_name || profile.name || currentUser?.email?.split('@')[0] || 'Learner';
 
   const badgesList = [
     { title: 'First Story', desc: 'Completed 1 personalized lesson', icon: '🚀', unlocked: true },
@@ -27,7 +30,7 @@ export const ProgressPage: React.FC = () => {
             Learning Analytics
           </Badge>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
-            {profile.name || 'Alex'}'s Learning Journey 🏆
+            {displayName}'s Learning Journey 🏆
           </h1>
           <p className="text-slate-600 text-sm sm:text-base">
             Track your completed lessons, mastered concepts, and unlocked achievements.
