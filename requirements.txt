@@ -1,0 +1,2 @@
+# EduTale Dependencies
+# Dependencies will be specified when model selection and backend requirements are finalized.

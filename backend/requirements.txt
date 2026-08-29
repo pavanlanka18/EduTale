@@ -1,0 +1,2 @@
+# EduTale Backend Dependencies
+# Specified upon backend library decisions.
