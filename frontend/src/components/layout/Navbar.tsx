@@ -1,0 +1,103 @@
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Sparkles, BookOpen, Compass, Trophy, Menu, X, User } from 'lucide-react';
+
+export const Navbar: React.FC = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const navLinks = [
+    { label: 'Explore', path: '/explore', icon: <Compass className="w-4 h-4" /> },
+    { label: 'My Stories', path: '/dashboard', icon: <BookOpen className="w-4 h-4" /> },
+    { label: 'Progress', path: '/progress', icon: <Trophy className="w-4 h-4" /> },
+  ];
+
+  const isActive = (path: string) => location.pathname === path;
+
+  return (
+    <header className="sticky top-0 z-40 w-full backdrop-blur-xl bg-white/80 border-b border-purple-100/60 transition-all">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        {/* Brand Logo */}
+        <Link to="/" className="flex items-center gap-3 group">
+          <div className="w-10 h-10 rounded-2xl overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+            <img src="/logo.svg" alt="EduTale Logo" className="w-full h-full object-contain" />
+          </div>
+          <div className="flex flex-col">
+            <span className="font-extrabold text-2xl tracking-tight text-[#0c1142] leading-none">
+              Edu<span className="text-[#f59e0b]">Tale</span>
+            </span>
+            <span className="text-[10px] font-semibold text-slate-500 tracking-wider uppercase mt-0.5">
+              Personalized Stories
+            </span>
+          </div>
+        </Link>
+
+        {/* Navigation Links Desktop */}
+        <nav className="hidden md:flex items-center gap-1 bg-slate-100/80 p-1.5 rounded-full border border-slate-200/60">
+          <Link
+            to="/"
+            className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+              isActive('/') ? 'bg-white text-brand-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            How it Works
+          </Link>
+          {navLinks.map((link) => (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+                isActive(link.path)
+                  ? 'bg-white text-brand-700 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              {link.icon}
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Action CTAs Desktop */}
+        <div className="hidden md:flex items-center gap-3">
+          <Link to="/dashboard" className="flex items-center gap-2 px-3.5 py-2 rounded-2xl text-slate-600 hover:text-brand-700 hover:bg-brand-50 text-sm font-semibold transition-all">
+            <User className="w-4 h-4" />
+            <span>Alex (Grade 5)</span>
+          </Link>
+        </div>
+
+        {/* Mobile menu toggle */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="md:hidden p-2 rounded-2xl text-slate-700 hover:bg-slate-100 focus:outline-none"
+        >
+          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-b border-purple-100 bg-white/95 backdrop-blur-lg px-4 pt-2 pb-6 space-y-3 animate-in slide-down">
+          <Link
+            to="/"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-4 py-3 rounded-2xl font-semibold text-slate-700 hover:bg-brand-50 hover:text-brand-700"
+          >
+            How it Works
+          </Link>
+          {navLinks.map((link) => (
+            <Link
+              key={link.path}
+              to={link.path}
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2 px-4 py-3 rounded-2xl font-semibold text-slate-700 hover:bg-brand-50 hover:text-brand-700"
+            >
+              {link.icon}
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </header>
+  );
+};

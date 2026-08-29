@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bookDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c1142" />
+      <stop offset="100%" stop-color="#1b1c62" />
+    </linearGradient>
+    <linearGradient id="swirlGold" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="50%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#fef08a" />
+    </linearGradient>
+    <linearGradient id="cloudPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b" />
+      <stop offset="100%" stop-color="#312e81" />
+    </linearGradient>
+  </defs>
+
+  <!-- Open Book Base -->
+  <path d="M 120,250 C 180,240 240,270 250,285 C 260,270 320,240 380,250 L 370,290 C 310,280 260,300 250,315 C 240,300 190,280 130,290 Z" fill="url(#bookDark)" />
+  <path d="M 130,240 C 185,230 240,255 250,270 C 260,255 315,230 370,240 L 370,250 C 315,240 260,265 250,280 C 240,265 185,240 130,250 Z" fill="#ffffff" opacity="0.9" />
+
+  <!-- Child Silhouette -->
+  <path d="M 210,265 C 200,240 195,210 215,190 C 220,185 225,185 230,180 C 225,175 220,160 230,150 C 245,135 270,145 265,165 C 275,170 280,185 270,200 C 280,215 285,240 270,265 Z" fill="#1b1c62" />
+
+  <!-- Magical Swirl -->
+  <path d="M 250,270 Q 280,240 260,210 T 290,170 Q 320,150 340,110 Q 310,130 295,150 Q 270,180 280,210 Q 290,230 250,270 Z" fill="url(#swirlGold)" />
+
+  <!-- Thought Cloud with Play Button -->
+  <path d="M 310,120 Q 300,80 340,60 Q 380,40 400,80 Q 430,90 420,120 Q 430,150 390,160 Q 360,170 330,150 Q 300,140 310,120 Z" fill="url(#cloudPurple)" />
+  <polygon points="355,95 385,112 355,130" fill="#ffffff" />
+  
+  <!-- Magic Stars -->
+  <path d="M 330,80 L 333,88 L 341,91 L 333,94 L 330,102 L 327,94 L 319,91 L 327,88 Z" fill="#fbbf24" />
+  <path d="M 315,130 L 317,135 L 322,137 L 317,139 L 315,144 L 313,139 L 308,137 L 313,135 Z" fill="#c084fc" />
+
+  <!-- Logo Text EduTale -->
+  <text x="70" y="390" font-family="'Plus Jakarta Sans', 'Arial Rounded MT Bold', sans-serif" font-weight="900" font-size="78" fill="#0b1354">Edu</text>
+  <text x="235" y="390" font-family="'Plus Jakarta Sans', 'Arial Rounded MT Bold', sans-serif" font-weight="900" font-size="82" fill="#f59e0b">Tale</text>
+  
+  <!-- Spark lines over Tale -->
+  <path d="M 405,325 L 415,312 M 420,335 L 435,327 M 425,350 L 440,348" stroke="#f59e0b" stroke-width="6" stroke-linecap="round" />
+
+  <!-- Tagline -->
+  <line x1="70" y1="425" x2="110" y2="425" stroke="#a5b4fc" stroke-width="3" stroke-linecap="round" />
+  <text x="120" y="429" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="16" fill="#475569" letter-spacing="0.5">Turn concepts into stories students understand.</text>
+  <line x1="420" y1="425" x2="460" y2="425" stroke="#a5b4fc" stroke-width="3" stroke-linecap="round" />
+</svg>
