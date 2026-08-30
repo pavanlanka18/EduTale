@@ -28,6 +28,61 @@ export const GRADE_OPTIONS: GradeOption[] = [
   { id: 'Grade 12', label: 'Grade 12', level: 'high' },
 ];
 
+export function getDynamicImageForScene(interest: string = '', topic: string = '', sceneIdx: number = 0): string {
+  const normInterest = (interest || '').toLowerCase();
+  const normTopic = (topic || '').toLowerCase();
+
+  // Water Cycle / Nature / Earth Science
+  if (normTopic.includes('water') || normTopic.includes('cycle') || normInterest.includes('nature')) {
+    const images = [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80", // Sunlit Surface
+      "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&w=1000&q=80", // Rising Mist
+      "https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=1000&q=80", // Cloud Formation
+      "https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&w=1000&q=80", // Rain & Precipitation
+      "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1000&q=80", // Rushing River Runoff
+      "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1000&q=80"  // Groundwater & Springs
+    ];
+    return images[sceneIdx % images.length];
+  }
+
+  // Space / Astronomy
+  if (normInterest.includes('space') || normTopic.includes('space') || normTopic.includes('cosmic') || normTopic.includes('orbit')) {
+    const images = [
+      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1000&q=80", // Nebula
+      "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1000&q=80", // Earth from Orbit
+      "https://images.unsplash.com/photo-1507499739999-097706ad8914?auto=format&fit=crop&w=1000&q=80", // Deep Galaxy
+      "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1000&q=80", // Space Habitat
+      "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1000&q=80", // Star Cluster
+      "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=1000&q=80"  // Planet Atmosphere
+    ];
+    return images[sceneIdx % images.length];
+  }
+
+  // Inventions / Physics / Technology
+  if (normInterest.includes('inventions') || normTopic.includes('energy') || normTopic.includes('tech') || normTopic.includes('physics')) {
+    const images = [
+      "https://images.unsplash.com/photo-1507668077129-56e32842fceb?auto=format&fit=crop&w=1000&q=80", // Science Lab
+      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=80", // Circuit Board
+      "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=1000&q=80", // Laboratory Optics
+      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=80", // Futuristic Robotics
+      "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=1000&q=80", // Solar Panels
+      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1000&q=80"  // Glowing Network
+    ];
+    return images[sceneIdx % images.length];
+  }
+
+  // Default Animals / Jungle / Nature
+  const images = [
+    "https://images.unsplash.com/photo-1511497584788-876761c119ef?auto=format&fit=crop&w=1000&q=80", // Sunlight Canopy
+    "https://images.unsplash.com/photo-1526095179574-86e5458421e0?auto=format&fit=crop&w=1000&q=80", // Zebra Meadow
+    "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=1000&q=80", // Tiger in Grass
+    "https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=1000&q=80", // Rain Shower
+    "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1000&q=80", // Rushing Stream
+    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80"  // Glowing Forest
+  ];
+  return images[sceneIdx % images.length];
+}
+
 export const MOCK_STORIES: Story[] = [
   {
     id: 'story-food-chain-milo',
@@ -56,7 +111,7 @@ export const MOCK_STORIES: Story[] = [
         title: "The Sunlight & Grasslands",
         narration: "High above the vibrant Amazon canopy, giant green fern leaves stretch toward the warm morning sunlight. Leaves absorb solar light to make sweet sugars in a process called photosynthesis. These leafy plants are the ultimate Producers!",
         visualDescription: "Bright jungle canopy bathed in golden sunlight with glowing energy particles flowing into broad green leaves.",
-        imageUrl: "https://images.unsplash.com/photo-1511497584788-876761c119ef?auto=format&fit=crop&w=1000&q=80",
+        imageUrl: getDynamicImageForScene("animals", "food chain", 0),
         duration: 12,
         conceptsHighlighted: ["Producer", "Photosynthesis"]
       },
@@ -65,7 +120,7 @@ export const MOCK_STORIES: Story[] = [
         title: "Meet Milo the Friendly Zebra",
         narration: "Along comes Milo the curious zebra! Milo loves munching on lush, sun-ripened green grass. Because Milo gets his energy directly by eating plants, scientists call him a Primary Consumer or Herbivore.",
         visualDescription: "A zebra grazing peacefully in a sunlit meadow with colorful butterflies fluttering nearby.",
-        imageUrl: "https://images.unsplash.com/photo-1526095179574-86e5458421e0?auto=format&fit=crop&w=1000&q=80",
+        imageUrl: getDynamicImageForScene("animals", "food chain", 1),
         duration: 11,
         conceptsHighlighted: ["Consumer", "Herbivore"]
       },
@@ -74,7 +129,7 @@ export const MOCK_STORIES: Story[] = [
         title: "The Watchful Tiger in the Shadows",
         narration: "Deep within the emerald tall grass, Tara the swift tiger leaps softly. Tara is a Secondary Consumer and Carnivore. She hunts plant-eaters to gain the energy originally stored in the grasses.",
         visualDescription: "A striking tiger crouched gracefully in tall golden-green jungle grass under dappled sunlight.",
-        imageUrl: "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=1000&q=80",
+        imageUrl: getDynamicImageForScene("animals", "food chain", 2),
         duration: 12,
         conceptsHighlighted: ["Secondary Consumer", "Carnivore"]
       },
@@ -83,7 +138,7 @@ export const MOCK_STORIES: Story[] = [
         title: "The Great Circle of Life",
         narration: "When living things complete their journey, decomposers like tiny forest mushrooms return essential nutrients back to the rich soil. This allows new plants to grow, keeping the ecosystem forever balanced!",
         visualDescription: "Glowing mushrooms on a forest floor, with sparkling nutrient threads linking soil to sprouting trees.",
-        imageUrl: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1000&q=80",
+        imageUrl: getDynamicImageForScene("animals", "food chain", 3),
         duration: 13,
         conceptsHighlighted: ["Decomposer", "Ecosystem Balance"]
       }
@@ -95,15 +150,60 @@ export const MOCK_STORIES: Story[] = [
         options: ["Decomposers", "Producers", "Secondary Consumers", "Apex Predators"],
         correctAnswer: 1,
         explanation: "Plants use sunlight to make their own food through photosynthesis, making them Producers!"
-      },
-      {
-        id: 'q2',
-        question: "Why is Milo the Zebra called a Primary Consumer?",
-        options: ["He makes his own food", "He eats producers (plants)", "He hunts tigers", "He lives underground"],
-        correctAnswer: 1,
-        explanation: "Animals that eat plants directly are primary consumers or herbivores."
       }
     ],
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'story-water-cycle-journey',
+    title: "The Global Water Cycle Loop",
+    subtitle: "A Grade 6 exploration of solar evaporation, cloud condensation, and groundwater aquifers.",
+    objective: "Master evaporation, condensation, precipitation, and infiltration loops.",
+    conceptName: "Hydrological Cycle",
+    learnerProfile: {
+      name: "Sam",
+      age: 11,
+      grade: "Grade 6",
+      interests: ["nature", "science"]
+    },
+    coverImage: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80",
+    readingTimeMinutes: 3,
+    gradeLevel: "Grade 6",
+    concepts: [
+      { name: "Evaporation", description: "Sunlight heating water into water vapor.", icon: "☀️" },
+      { name: "Condensation", description: "Vapor cooling into clouds.", icon: "☁️" },
+      { name: "Precipitation", description: "Rain, snow, or hail falling to Earth.", icon: "🌧️" }
+    ],
+    scenes: [
+      {
+        id: 1,
+        title: "Solar Heat & Lake Evaporation",
+        narration: "Sunlight beams down on a crystal lake, energizing water molecules until they turn into rising vapor mist.",
+        visualDescription: "Sunlit mountain lake with mist gently rising into the morning sky.",
+        imageUrl: getDynamicImageForScene("nature", "water cycle", 0),
+        duration: 14,
+        conceptsHighlighted: ["Evaporation"]
+      },
+      {
+        id: 2,
+        title: "Clouds & Atmospheric Condensation",
+        narration: "As vapor floats into the cool sky, it cools down and clumps together to form giant fluffy rainclouds.",
+        visualDescription: "Dramatic view of billowing white storm clouds gathering over mountain peaks.",
+        imageUrl: getDynamicImageForScene("nature", "water cycle", 2),
+        duration: 15,
+        conceptsHighlighted: ["Condensation"]
+      },
+      {
+        id: 3,
+        title: "Precipitation & Rushing Rivers",
+        narration: "Heavy clouds release rain droplets that feed rushing rivers and seep into underground aquifers.",
+        visualDescription: "A rushing river flowing through a lush pine forest during a fresh rainfall.",
+        imageUrl: getDynamicImageForScene("nature", "water cycle", 4),
+        duration: 16,
+        conceptsHighlighted: ["Precipitation"]
+      }
+    ],
+    quiz: [],
     createdAt: new Date().toISOString()
   },
   {
@@ -124,8 +224,7 @@ export const MOCK_STORIES: Story[] = [
     concepts: [
       { name: "Solar Radiance", description: "Electromagnetic energy emitted by stellar fusion.", icon: "☀️" },
       { name: "Trophic Levels", description: "Hierarchical steps in an ecosystem's food pyramid.", icon: "📊" },
-      { name: "10% Energy Rule", description: "Only ~10% of energy transfers up to the next trophic level.", icon: "⚡" },
-      { name: "Biosphere Dynamic", description: "Self-sustaining biological systems operating in closed environments.", icon: "🌌" }
+      { name: "10% Energy Rule", description: "Only ~10% of energy transfers up to the next trophic level.", icon: "⚡" }
     ],
     scenes: [
       {
@@ -133,7 +232,7 @@ export const MOCK_STORIES: Story[] = [
         title: "Stellar Energy Generation",
         narration: "In orbital hydroponic stations surrounding planet Kepler-186f, solar radiation illuminates bio-domes. Solar photons fuel primary metabolic production in engineered algae systems.",
         visualDescription: "Futuristic space habitat domes orbiting a distant planet glowing with interior green bioluminescence.",
-        imageUrl: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1000&q=80",
+        imageUrl: getDynamicImageForScene("space", "cosmic", 0),
         duration: 13,
         conceptsHighlighted: ["Solar Radiance", "Primary Production"]
       },
@@ -142,7 +241,7 @@ export const MOCK_STORIES: Story[] = [
         title: "Trophic Level Compression",
         narration: "Synthetic organisms graze upon the algae. At each ascending trophic level, 90% of heat energy radiates into space according to thermodynamic entropy, leaving 10% for cellular growth.",
         visualDescription: "Holographic 3D trophic pyramid floating inside a space laboratory showing energy dissipation spectra.",
-        imageUrl: "https://images.unsplash.com/photo-1507499739999-097706ad8914?auto=format&fit=crop&w=1000&q=80",
+        imageUrl: getDynamicImageForScene("space", "cosmic", 1),
         duration: 14,
         conceptsHighlighted: ["10% Energy Rule", "Thermodynamics"]
       },
@@ -151,20 +250,12 @@ export const MOCK_STORIES: Story[] = [
         title: "Biospheric Closed Loops",
         narration: "Sub-surface decomposers recycle nitrogen compounds directly back to hydro-farms, closing the thermodynamic loop and proving that ecosystems survive through continuous energy conversion.",
         visualDescription: "Intricate glowing schematic of a self-sustaining space colony ecological closed loop.",
-        imageUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1000&q=80",
+        imageUrl: getDynamicImageForScene("space", "cosmic", 2),
         duration: 13,
-        conceptsHighlighted: ["Closed Loop Biosphere", "Ecosystem Entropy"]
+        conceptsHighlighted: ["Closed Loop Biosphere"]
       }
     ],
-    quiz: [
-      {
-        id: 'q1',
-        question: "How much energy is typically transferred between trophic levels?",
-        options: ["100%", "50%", "Approximately 10%", "0.1%"],
-        correctAnswer: 2,
-        explanation: "Due to metabolic heat loss, roughly 10% of energy transfers to the next trophic level."
-      }
-    ],
+    quiz: [],
     createdAt: new Date().toISOString()
   }
 ];
@@ -195,16 +286,38 @@ class StorageService {
   }
 
   getStories(): Story[] {
+    let list: Story[] = MOCK_STORIES;
     try {
       const raw = localStorage.getItem(this.STORAGE_KEY_STORIES);
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          list = parsed;
+        }
       }
     } catch {
       // fallback
     }
-    return MOCK_STORIES;
+
+    // Ensure every story has a unique, topic/interest-aligned cover image and scene images
+    return list.map((story, idx) => {
+      const primaryInterest = story.learnerProfile?.interests?.[0] || 'animals';
+      const topicName = story.conceptName || story.title || 'Science';
+      const dynamicCover = getDynamicImageForScene(primaryInterest, topicName, idx);
+
+      const updatedScenes = (story.scenes || []).map((scene, sIdx) => ({
+        ...scene,
+        imageUrl: (scene.imageUrl && !scene.imageUrl.includes('photo-1516426122078-c23e76319801'))
+          ? scene.imageUrl 
+          : getDynamicImageForScene(primaryInterest, topicName, sIdx)
+      }));
+
+      return {
+        ...story,
+        coverImage: dynamicCover,
+        scenes: updatedScenes
+      };
+    });
   }
 
   getStoryById(id: string): Story | undefined {
@@ -252,7 +365,8 @@ class StorageService {
       body: JSON.stringify(payload),
     });
     if (!response.ok) {
-      throw new Error('Failed to generate story with RAG');
+      const errData = await response.json().catch(() => ({ detail: 'Failed to generate story' }));
+      throw new Error(errData.detail || errData.error || 'Failed to generate story with RAG');
     }
     const data = await response.json();
     
@@ -262,8 +376,8 @@ class StorageService {
     const newStory: Story = {
       id: `story-rag-${Date.now()}`,
       title: `${topicName} Adventure`,
-      subtitle: `Generated with RAG from source material for Grade ${payload.profile.grade} learner.`,
-      objective: `Understand key concepts of ${topicName} via personalized narration.`,
+      subtitle: `Multi-scene story generated with RAG source material for Grade ${payload.profile.grade} learner.`,
+      objective: `Master the complete mechanics and multi-stage process of ${topicName}.`,
       conceptName: topicName,
       learnerProfile: {
         name: "Learner",
@@ -271,30 +385,78 @@ class StorageService {
         grade: `Grade ${payload.profile.grade}`,
         interests: [primaryInterest],
       },
-      coverImage: "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1000&q=80",
+      coverImage: getDynamicImageForScene(primaryInterest, topicName, 0),
       readingTimeMinutes: 3,
       gradeLevel: `Grade ${payload.profile.grade}`,
       concepts: [
-        { name: topicName, description: `Core concepts retrieved from material.`, icon: "🌱" }
+        { name: "Thermal Heating & Evaporation", description: `Solar energy converts liquid into gas.`, icon: "☀️" },
+        { name: "Cooling & Condensation", description: `Vapor cools into cloud droplets.`, icon: "☁️" },
+        { name: "Precipitation", description: `Rain and snow fall to nourish ecosystems.`, icon: "🌧️" },
+        { name: "Runoff & Groundwater Loops", description: `Water channels into aquifers and oceans.`, icon: "💧" }
       ],
       scenes: [
         {
           id: 1,
-          title: `${topicName} Fundamentals`,
-          narration: typeof data.story === 'string' ? data.story : `Here is your custom story for ${topicName}.`,
-          visualDescription: `Illustrating ${topicName} with a theme of ${primaryInterest}.`,
-          imageUrl: "https://images.unsplash.com/photo-1511497584788-876761c119ef?auto=format&fit=crop&w=1000&q=80",
-          duration: 12,
-          conceptsHighlighted: [topicName],
+          title: "Scene 1: Solar Heat & Energy Input",
+          narration: typeof data.story === 'string' ? data.story : `Welcome to our ${primaryInterest}-inspired adventure! Every global loop in ${topicName} begins when solar heat warms earth's surface waters. Energetic molecules vibrate rapidly as they prepare for atmospheric transformation.`,
+          visualDescription: `Sunlit panoramic view of rivers and oceans warming under bright sunlight in a ${primaryInterest} setting.`,
+          imageUrl: getDynamicImageForScene(primaryInterest, topicName, 0),
+          duration: 18,
+          conceptsHighlighted: ["Thermal Heating & Evaporation"],
+        },
+        {
+          id: 2,
+          title: "Scene 2: Rising Water Vapor",
+          narration: `As surface liquid reaches warm temperatures, it converts into invisible water vapor gas. Millions of tiny vapor particles ascend high into the sky above our ${primaryInterest} ecosystem.`,
+          visualDescription: `Microscopic view of sparkling water vapor molecules rising gracefully into the blue sky.`,
+          imageUrl: getDynamicImageForScene(primaryInterest, topicName, 1),
+          duration: 18,
+          conceptsHighlighted: ["Thermal Heating & Evaporation"],
+        },
+        {
+          id: 3,
+          title: "Scene 3: Condensation & Cloud Formation",
+          narration: `High in the cool atmosphere, rising vapor cools down quickly. The tiny gas particles gather together around dust grains, forming billowy white clouds that drift gracefully above the ${primaryInterest} landscape.`,
+          visualDescription: `Wide shot of fluffy white clouds gathering and swelling in the cool atmosphere over mountains.`,
+          imageUrl: getDynamicImageForScene(primaryInterest, topicName, 2),
+          duration: 18,
+          conceptsHighlighted: ["Cooling & Condensation"],
+        },
+        {
+          id: 4,
+          title: "Scene 4: Precipitation & Falling Moisture",
+          narration: `When clouds become heavy with condensed water droplets, gravity draws them back down! Refreshing rain and sparkling snow fall to nourish plants, animals, and soil across our ${primaryInterest} biome.`,
+          visualDescription: `Refreshing rain shower falling over a vibrant ecosystem with water droplets glistening on leaves.`,
+          imageUrl: getDynamicImageForScene(primaryInterest, topicName, 3),
+          duration: 18,
+          conceptsHighlighted: ["Precipitation"],
+        },
+        {
+          id: 5,
+          title: "Scene 5: Surface Runoff & Collection",
+          narration: `Once rainfall touches down, gravity channels streams into rushing rivers. These waterways flow together across the terrain, collecting in lakes and oceans to restart the eternal cycle.`,
+          visualDescription: `A crystal-clear river winding through a valley into a glistening lake surrounded by flora.`,
+          imageUrl: getDynamicImageForScene(primaryInterest, topicName, 4),
+          duration: 18,
+          conceptsHighlighted: ["Runoff & Groundwater Loops"],
+        },
+        {
+          id: 6,
+          title: "Scene 6: Infiltration & The Global Loop",
+          narration: `Much of the falling moisture filters deep into underground soil layers through infiltration, replenishing sub-surface aquifers that sustain life across the ${primaryInterest} biome!`,
+          visualDescription: `Diagrammatic cross-section showing rainwater absorbing into underground aquifers beneath lush soil.`,
+          imageUrl: getDynamicImageForScene(primaryInterest, topicName, 5),
+          duration: 20,
+          conceptsHighlighted: ["Runoff & Groundwater Loops"],
         }
       ],
       quiz: [
         {
           id: 'q1',
-          question: `What is the core theme of ${topicName}?`,
-          options: ["Balanced system interaction", "No input required", "Static state"],
+          question: `What causes surface water to transform into vapor during ${topicName}?`,
+          options: ["Solar Energy & Heat Input", "Freezing Air Temperatures", "High Wind Speeds", "Heavy Ground Rocks"],
           correctAnswer: 0,
-          explanation: `Understanding ${topicName} relies on analyzing real-world interactions.`,
+          explanation: `Solar radiation provides the thermal energy that turns surface liquid into vapor!`,
         }
       ],
       createdAt: new Date().toISOString(),
@@ -344,7 +506,7 @@ class StorageService {
             objective: `Understand the core principles of ${topicName} through personalized narration.`,
             conceptName: topicName,
             learnerProfile: profile,
-            coverImage: "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1000&q=80",
+            coverImage: getDynamicImageForScene(primaryInterest, topicName, 0),
             readingTimeMinutes: 3,
             gradeLevel: profile.grade,
             concepts: [
@@ -358,7 +520,7 @@ class StorageService {
                 title: "Setting the Baseline",
                 narration: `Welcome! Today we explore ${topicName}, tailored for your interest in ${primaryInterest}.`,
                 visualDescription: `Sunlit scene demonstrating ${topicName}.`,
-                imageUrl: "https://images.unsplash.com/photo-1511497584788-876761c119ef?auto=format&fit=crop&w=1000&q=80",
+                imageUrl: getDynamicImageForScene(primaryInterest, topicName, 0),
                 duration: 12,
                 conceptsHighlighted: ["Core Principle"]
               },
@@ -367,7 +529,7 @@ class StorageService {
                 title: "Active Transfer & Dynamics",
                 narration: `Notice how each element interacts. Just like in ${primaryInterest}, energy flows continuously!`,
                 visualDescription: `Dynamic interaction scene for ${topicName}.`,
-                imageUrl: "https://images.unsplash.com/photo-1526095179574-86e5458421e0?auto=format&fit=crop&w=1000&q=80",
+                imageUrl: getDynamicImageForScene(primaryInterest, topicName, 1),
                 duration: 12,
                 conceptsHighlighted: ["Key Interaction"]
               },
@@ -376,8 +538,8 @@ class StorageService {
                 title: "Completing the Cycle",
                 narration: `Decomposers return vital nutrients back into the cycle, keeping the system balanced!`,
                 visualDescription: `Glowing forest floor recycling nutrients into new growth.`,
-                imageUrl: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1000&q=80",
-                duration: 11,
+                imageUrl: getDynamicImageForScene(primaryInterest, topicName, 2),
+                duration: 13,
                 conceptsHighlighted: ["System Balance"]
               }
             ],

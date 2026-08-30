@@ -205,7 +205,10 @@ export const LearnPlayerPage: React.FC = () => {
       <footer className="max-w-5xl w-full mx-auto space-y-4">
         
         {/* SCENE TIMELINE PROGRESS BARS */}
-        <div className="grid grid-cols-4 gap-2">
+        <div
+          className="grid gap-2"
+          style={{ gridTemplateColumns: `repeat(${Math.max(1, story.scenes.length)}, minmax(0, 1fr))` }}
+        >
           {story.scenes.map((s, idx) => {
             const isCompleted = idx < currentSceneIndex;
             const isCurrent = idx === currentSceneIndex;

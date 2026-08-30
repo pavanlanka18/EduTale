@@ -19,6 +19,7 @@ from app.core.database import init_db
 from app.core.exceptions import EduTaleException, LessonNotFound, StudentNotFound, InvalidContentType, ProcessingError
 from app.schemas.common import ErrorResponse
 from app.api.routes import api_router
+from backend.app.api.video import router as video_router
 
 # Configure Logging
 logging.basicConfig(
@@ -135,3 +136,4 @@ async def root():
 
 # Include API Router
 app.include_router(api_router, prefix="/api/v1")
+app.include_router(video_router, prefix="/api")

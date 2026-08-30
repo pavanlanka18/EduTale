@@ -52,3 +52,12 @@ def test_extract_text_from_pil_blank_image_returns_empty():
     blank_img = Image.new("RGB", (200, 200), color=(255, 255, 255))
     result = ocr_engine.extract_text_from_pil(blank_img)
     assert result == ""
+
+
+def test_import_document_loader_succeeds_with_declared_deps():
+    """Test importing rag.document_loader succeeds and exposes DocumentLoader and TextExtractionError."""
+    import importlib
+    mod = importlib.import_module("rag.document_loader")
+    assert hasattr(mod, "DocumentLoader")
+    assert hasattr(mod, "TextExtractionError")
+    assert hasattr(mod, "document_loader")

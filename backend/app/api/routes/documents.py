@@ -38,7 +38,7 @@ async def upload_document(
                 )
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail="This PDF contains no readable text and OCR could not read it. It may be a scanned image of poor quality — try a clearer scan or paste the text directly."
+                detail="This PDF contains no readable text and OCR could not read it. It may be a low-quality scan — try a clearer file or paste the text directly."
             )
         except Exception as e:
             raise HTTPException(
@@ -56,7 +56,7 @@ async def upload_document(
     if not extracted_text.strip():
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="This PDF contains no readable text and OCR could not read it. It may be a scanned image of poor quality — try a clearer scan or paste the text directly."
+            detail="This PDF contains no readable text and OCR could not read it. It may be a low-quality scan — try a clearer file or paste the text directly."
         )
 
     document_id = f"doc_{uuid.uuid4().hex[:12]}"
@@ -65,7 +65,7 @@ async def upload_document(
     if not chunks:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="This PDF contains no readable text and OCR could not read it. It may be a scanned image of poor quality — try a clearer scan or paste the text directly."
+            detail="This PDF contains no readable text and OCR could not read it. It may be a low-quality scan — try a clearer file or paste the text directly."
         )
 
     texts = [c["text"] for c in chunks]

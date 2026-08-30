@@ -1,0 +1,6 @@
+file 'C:/Users/Pavanlanka/OneDrive/Desktop/code/EduTale/data/video/les_6c239493a7_scene_1.mp4'
+file 'C:/Users/Pavanlanka/OneDrive/Desktop/code/EduTale/data/video/les_6c239493a7_scene_2.mp4'
+file 'C:/Users/Pavanlanka/OneDrive/Desktop/code/EduTale/data/video/les_6c239493a7_scene_3.mp4'
+file 'C:/Users/Pavanlanka/OneDrive/Desktop/code/EduTale/data/video/les_6c239493a7_scene_4.mp4'
+file 'C:/Users/Pavanlanka/OneDrive/Desktop/code/EduTale/data/video/les_6c239493a7_scene_5.mp4'
+file 'C:/Users/Pavanlanka/OneDrive/Desktop/code/EduTale/data/video/les_6c239493a7_scene_6.mp4'

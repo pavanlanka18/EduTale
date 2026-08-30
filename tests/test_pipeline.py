@@ -18,7 +18,7 @@ SAMPLE_PROFILE = {
 }
 
 def test_story_llm_generation():
-    """Test generating structured story output."""
+    """Test generating structured multi-scene story output."""
     story = story_llm.generate_story(
         rag_context="Photosynthesis converts solar light into plant energy.",
         student_profile=SAMPLE_PROFILE,
@@ -26,7 +26,7 @@ def test_story_llm_generation():
     )
     assert "title" in story
     assert "scenes" in story
-    assert len(story["scenes"]) == 3
+    assert len(story["scenes"]) >= 5
     assert "quiz" in story
 
 def test_scene_decomposition():
@@ -37,8 +37,8 @@ def test_scene_decomposition():
         topic="Food Chain"
     )
     scenes = scene_pipeline.decompose_into_scenes(story)
-    assert len(scenes) == 3
-    assert scenes[0]["duration"] >= 5
+    assert len(scenes) >= 5
+    assert scenes[0]["duration"] >= 12
 
 def test_tts_audio_generation():
     """Test generating WAV audio file and measuring exact duration."""
@@ -61,4 +61,4 @@ def test_end_to_end_lesson_pipeline():
     assert result["lesson_id"] == "test_les_100"
     assert "story" in result
     assert "video_url" in result
-    assert result["total_scenes"] == 3
+    assert result["total_scenes"] >= 5

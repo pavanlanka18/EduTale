@@ -1,33 +1,55 @@
 import logging
-from typing import Dict, Any, List
+from typing import List, Dict, Any
 
 logger = logging.getLogger("edutale.pipeline.scene")
 
-class ScenePipeline:
-    """Pipeline for decomposing stories into synchronized scene objects."""
 
+def prose_to_scenes(story_text: str, target_scenes: int = 4) -> dict:
+    """Split prose into scene dicts matching ScenePipeline's expected shape."""
+    paras = [p.strip() for p in story_text.split("\n\n") if p.strip()]
+    if len(paras) < target_scenes:
+        import re
+        sents = re.split(r'(?<=[.!?])\s+', story_text)
+        sents = [s for s in sents if s.strip()]
+        per = max(1, len(sents) // target_scenes)
+        paras = [" ".join(sents[i:i+per]) for i in range(0, len(sents), per)]
+
+    paras = paras[:target_scenes]
+    return {
+        "title": story_text.split("\n")[0][:60] if story_text else "Educational Story",
+        "scenes": [
+            {
+                "title": f"Scene {i}",
+                "narration": p,
+                "visualDescription": p,
+                "conceptsHighlighted": [],
+            }
+            for i, p in enumerate(paras, start=1)
+        ],
+    }
+
+
+class ScenePipeline:
     def decompose_into_scenes(self, story_data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Decompose story output into processed scene items."""
         raw_scenes = story_data.get("scenes", [])
-        processed_scenes = []
+        decomposed = []
 
         for idx, scene in enumerate(raw_scenes, start=1):
             narration = scene.get("narration", "")
-            # Estimate narration duration based on average speaking rate (approx. 2.5 words/sec)
             word_count = len(narration.split())
-            estimated_duration = max(8, round(word_count / 2.2))
+            estimated_duration = max(4, round(word_count / 2.0))
 
-            processed_scene = {
-                "id": idx,
+            decomposed.append({
+                "id": scene.get("id", idx),
                 "title": scene.get("title", f"Scene {idx}"),
                 "narration": narration,
-                "visualDescription": scene.get("visualDescription", f"Visual prompt for scene {idx}"),
+                "visualDescription": scene.get("visualDescription", narration),
                 "duration": estimated_duration,
                 "conceptsHighlighted": scene.get("conceptsHighlighted", [])
-            }
-            processed_scenes.append(processed_scene)
+            })
 
-        logger.info(f"Decomposed story '{story_data.get('title')}' into {len(processed_scenes)} scenes.")
-        return processed_scenes
+        logger.info(f"Decomposed story '{story_data.get('title')}' into {len(decomposed)} scenes.")
+        return decomposed
+
 
 scene_pipeline = ScenePipeline()

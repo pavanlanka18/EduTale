@@ -4,7 +4,12 @@ story_model:
   adapter: Pavanlanka/edutale-story-adapter
   endpoint_url: ${STORY_MODEL_URL}
   generation:
-    max_new_tokens: 400
-    temperature: 0.8
-    top_p: 0.9
-    repetition_penalty: 1.1
+    max_new_tokens: 1200
+    temperature: 0.75
+    top_p: 0.92
+    repetition_penalty: 1.15
+
+video_model:
+  mode: remote
+  endpoint_url: ${VIDEO_MODEL_URL}
+  max_scenes_with_video: 2

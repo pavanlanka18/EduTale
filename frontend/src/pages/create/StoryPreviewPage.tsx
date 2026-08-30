@@ -102,6 +102,63 @@ export const StoryPreviewPage: React.FC = () => {
               </div>
             </div>
 
+            {/* STORY TRANSCRIPT & SCRIPT SECTION */}
+            <div className="space-y-4 pt-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-brand-400" />
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
+                    Full Story Transcript & Narration Script
+                  </h3>
+                </div>
+                <span className="text-xs text-brand-400 font-semibold bg-brand-950/60 border border-brand-800/50 px-2.5 py-1 rounded-lg">
+                  {story.scenes.length} Scenes
+                </span>
+              </div>
+
+              <div className="space-y-3">
+                {story.scenes.map((scene, idx) => (
+                  <div
+                    key={scene.id || idx}
+                    className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3 transition-all hover:border-slate-700"
+                  >
+                    <div className="flex items-center justify-between gap-2 border-b border-slate-800/80 pb-2.5">
+                      <div className="flex items-center gap-2">
+                        <span className="bg-brand-600/30 text-brand-300 text-xs font-extrabold px-2.5 py-0.5 rounded-md border border-brand-500/30">
+                          Scene {idx + 1}
+                        </span>
+                        <h4 className="text-sm font-bold text-white">{scene.title}</h4>
+                      </div>
+                      <span className="text-[11px] text-slate-400 font-mono">⏱ {scene.duration}s</span>
+                    </div>
+
+                    <div className="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800/60 text-slate-200 text-xs sm:text-sm leading-relaxed italic">
+                      "{scene.narration}"
+                    </div>
+
+                    {scene.visualDescription && (
+                      <p className="text-xs text-slate-400 flex items-center gap-1.5 pt-0.5">
+                        <span className="text-slate-500 font-semibold">Visual Prompt:</span> {scene.visualDescription}
+                      </p>
+                    )}
+
+                    {scene.conceptsHighlighted && scene.conceptsHighlighted.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {scene.conceptsHighlighted.map((tag, tIdx) => (
+                          <span
+                            key={tIdx}
+                            className="bg-purple-950/50 text-purple-300 border border-purple-800/50 text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                          >
+                            ✨ {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* ACTION BUTTONS */}
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-800">
               <Button

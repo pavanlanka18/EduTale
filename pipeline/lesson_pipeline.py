@@ -2,9 +2,10 @@ import logging
 from typing import Dict, Any, Optional
 
 from pipeline.content_pipeline import content_pipeline
-from pipeline.story_pipeline import story_pipeline
+from pipeline.story_pipeline import story_pipeline, prose_to_scenes
 from pipeline.scene_pipeline import scene_pipeline
 from pipeline.media_pipeline import media_pipeline
+from pipeline.video_assembly import video_assembly
 from rag.retriever import rag_retriever
 
 logger = logging.getLogger("edutale.pipeline.lesson")
@@ -43,6 +44,22 @@ class EndToEndLessonPipeline:
             document_id=lesson_id
         )
 
+        # Wire prose_to_scenes: if scenes key is missing or empty, convert prose first
+        if not (isinstance(story_data, dict) and story_data.get("scenes") and len(story_data["scenes"]) > 0):
+            prose_text = ""
+            if isinstance(story_data, str):
+                prose_text = story_data
+            elif isinstance(story_data, dict):
+                prose_text = story_data.get("story") or str(story_data)
+
+            converted = prose_to_scenes(prose_text, target_scenes=4)
+            if isinstance(story_data, dict):
+                story_data["scenes"] = converted["scenes"]
+                if not story_data.get("title"):
+                    story_data["title"] = converted["title"]
+            else:
+                story_data = converted
+
         # Step 4: Scene Decomposition
         decomposed_scenes = scene_pipeline.decompose_into_scenes(story_data)
 
@@ -51,6 +68,7 @@ class EndToEndLessonPipeline:
         story_data["scenes"] = synced_scenes
 
         # Step 6: Final Video Assembly
+        final_mp4_path = video_assembly.generate_and_assemble_lesson_video(synced_scenes, lesson_id=lesson_id)
         video_url = media_pipeline.assemble_final_video(synced_scenes, lesson_id=lesson_id)
 
         logger.info(f"End-to-End EduTale Lesson Pipeline finished successfully for '{lesson_id}'!")
