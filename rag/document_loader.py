@@ -2,9 +2,16 @@ import os
 import io
 import logging
 from typing import Dict, Any, Union
+import fitz  # PyMuPDF
 from models.ocr_model import ocr_engine
 
 logger = logging.getLogger("edutale.rag.loader")
+
+
+class TextExtractionError(Exception):
+    """Custom exception raised when text cannot be extracted from a document."""
+    pass
+
 
 class DocumentLoader:
     """Document loader handling text files, PDFs, and OCR image files."""
@@ -43,32 +50,36 @@ class DocumentLoader:
                 return f.read()
 
     def _extract_pdf_bytes(self, pdf_bytes: bytes) -> str:
-        """Extract text from PDF, falling back to OCR image rendering if PDF is scanned."""
-        extracted_text = ""
+        """Extract text from PDF using PyMuPDF (fitz), falling back to EasyOCR on page rasterization."""
         try:
-            import pypdf
-            reader = pypdf.PdfReader(io.BytesIO(pdf_bytes))
-            for page in reader.pages:
-                page_text = page.extract_text()
-                if page_text:
-                    extracted_text += page_text + "\n"
+            doc = fitz.open(stream=pdf_bytes, filetype="pdf")
         except Exception as e:
-            logger.warning(f"pypdf extraction failed or uninstalled: {e}")
+            raise TextExtractionError(f"Corrupted or invalid PDF structure: {e}")
 
-        # If PDF is scanned (no native text), attempt OCR using pdf2image
-        if not extracted_text.strip():
-            logger.info("PDF appears to be scanned or contains image pages. Triggering pdf2image OCR pipeline...")
-            try:
-                from pdf2image import convert_from_bytes
-                images = convert_from_bytes(pdf_bytes)
-                ocr_pages = []
-                for i, img in enumerate(images):
-                    logger.info(f"Running EasyOCR on PDF page {i + 1}")
-                    ocr_pages.append(ocr_engine.extract_text_from_pil(img))
-                extracted_text = "\n\n".join(ocr_pages)
-            except Exception as pdf_ocr_err:
-                logger.error(f"pdf2image OCR failed: {pdf_ocr_err}")
+        extracted_text = ""
+        for page in doc:
+            page_text = page.get_text()
+            if page_text:
+                extracted_text += page_text + "\n"
 
-        return ocr_engine.clean_extracted_text(extracted_text)
+        if extracted_text.strip():
+            return ocr_engine.clean_extracted_text(extracted_text)
+
+        # If empty text layer, rasterize each page and pass image to EasyOCR
+        logger.info("PDF has no native text layer; rasterizing pages for EasyOCR...")
+        ocr_pages = []
+        for i, page in enumerate(doc):
+            pix = page.get_pixmap(dpi=200)
+            img_bytes = pix.tobytes("png")
+            page_ocr = ocr_engine.extract_text_from_bytes(img_bytes)
+            if page_ocr.strip():
+                ocr_pages.append(page_ocr)
+
+        full_ocr_text = "\n\n".join(ocr_pages)
+        if full_ocr_text.strip():
+            return ocr_engine.clean_extracted_text(full_ocr_text)
+
+        raise TextExtractionError("PDF contains no readable text layer and EasyOCR detected no text on rasterized pages.")
+
 
 document_loader = DocumentLoader()

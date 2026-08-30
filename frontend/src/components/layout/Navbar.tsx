@@ -72,7 +72,7 @@ export const Navbar: React.FC = () => {
           <div className="hidden md:flex items-center gap-3">
             {currentUser ? (
               <div className="flex items-center gap-2">
-                <Link to="/create/profile" className="flex items-center gap-2 px-3.5 py-2 rounded-2xl text-slate-700 hover:text-brand-700 hover:bg-brand-50 text-sm font-semibold transition-all border border-slate-200/80">
+                <Link to="/profile" className="flex items-center gap-2 px-3.5 py-2 rounded-2xl text-slate-700 hover:text-brand-700 hover:bg-brand-50 text-sm font-semibold transition-all border border-slate-200/80">
                   <User className="w-4 h-4 text-indigo-600" />
                   <span>Profile Settings ({currentUser.full_name || currentUser.email.split('@')[0]})</span>
                 </Link>
@@ -129,7 +129,7 @@ export const Navbar: React.FC = () => {
               {currentUser ? (
                 <>
                   <Link
-                    to="/create/profile"
+                    to="/profile"
                     onClick={() => setMobileMenuOpen(false)}
                     className="flex items-center gap-2 px-4 py-3 rounded-2xl font-semibold text-slate-700 hover:bg-brand-50 hover:text-brand-700"
                   >

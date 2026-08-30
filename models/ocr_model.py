@@ -61,9 +61,7 @@ class EasyOCREngine:
             except Exception as e:
                 logger.error(f"EasyOCR processing failed: {e}")
 
-        # Fallback basic OCR message / stub if easyocr is uninitialized
-        logger.info("Using fallback text reader for OCR image")
-        return "Photosynthesis converts solar light into plant energy. Primary consumers eat plants."
+        return ""
 
     def _process_ocr_results(self, results: List[Any]) -> str:
         """Sort bounding boxes vertically (top-to-bottom) and assemble clean text paragraphs."""

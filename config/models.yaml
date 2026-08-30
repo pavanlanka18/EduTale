@@ -1,3 +1,10 @@
-# Model configurations
-# To be populated after finalizing model selection.
-models: {}
+story_model:
+  mode: remote                                  # "local" | "remote"
+  base_model: Qwen/Qwen2.5-3B-Instruct
+  adapter: Pavanlanka/edutale-story-adapter
+  endpoint_url: ${STORY_MODEL_URL}
+  generation:
+    max_new_tokens: 400
+    temperature: 0.8
+    top_p: 0.9
+    repetition_penalty: 1.1

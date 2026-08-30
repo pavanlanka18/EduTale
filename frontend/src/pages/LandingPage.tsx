@@ -45,7 +45,7 @@ export const LandingPage: React.FC = () => {
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link to="/create/profile" className="w-full sm:w-auto">
+              <Link to="/create/material" className="w-full sm:w-auto">
                 <Button size="lg" fullWidth icon={<ArrowRight className="w-5 h-5" />}>
                   Create My Story →
                 </Button>
@@ -392,7 +392,7 @@ export const LandingPage: React.FC = () => {
                 Join thousands of students and parents making learning fun, visual, and unforgettable.
               </p>
               <div>
-                <Link to="/create/profile">
+                <Link to="/create/material">
                   <Button size="lg" className="bg-white text-brand-900 hover:bg-slate-100 shadow-xl">
                     Create My First Story Now →
                   </Button>

@@ -17,7 +17,7 @@ export const StoryPreviewPage: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="text-center space-y-4">
           <h2 className="text-2xl font-bold">Story Not Found</h2>
-          <Link to="/create/profile">
+          <Link to="/create/material">
             <Button>Create New Story</Button>
           </Link>
         </div>

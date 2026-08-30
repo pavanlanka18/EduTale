@@ -62,6 +62,15 @@ class LessonModel(Base):
     user = relationship("UserModel", back_populates="lessons")
     student = relationship("StudentProfileModel", back_populates="lessons")
 
+class DocumentModel(Base):
+    __tablename__ = "documents"
+
+    id = Column(String, primary_key=True, index=True)
+    filename = Column(String, nullable=False)
+    content = Column(Text, nullable=False)
+    chunk_count = Column(Integer, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
 # Database Engine
 os.makedirs(settings.DATA_DIR, exist_ok=True)
 engine = create_async_engine(settings.DATABASE_URL, echo=False)
@@ -84,6 +93,7 @@ class Database:
     def __init__(self):
         self._lessons: Dict[str, Dict[str, Any]] = {}
         self._students: Dict[str, Dict[str, Any]] = {}
+        self._documents: Dict[str, Dict[str, Any]] = {}
         
         # Seed initial sample student
         self._students["student-sample-1"] = {
@@ -154,5 +164,16 @@ class Database:
             raise LessonNotFound(lesson_id)
         del self._lessons[lesson_id]
         return True
+
+    # Document Operations
+    def create_document(self, document_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
+        data["document_id"] = document_id
+        now = datetime.utcnow()
+        data["created_at"] = now
+        self._documents[document_id] = data
+        return data
+
+    def get_document(self, document_id: str) -> Optional[Dict[str, Any]]:
+        return self._documents.get(document_id)
 
 db = Database()

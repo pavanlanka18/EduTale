@@ -8,10 +8,19 @@ pytest>=7.4.0
 Pillow>=10.0.0
 opencv-python-headless>=4.8.0.76
 easyocr>=1.7.0
-pdf2image>=1.16.3
+pymupdf>=1.24.0
 python-multipart>=0.0.6
 sqlalchemy>=2.0.0
 aiosqlite>=0.19.0
 passlib[bcrypt]>=1.7.4
 pyjwt>=2.8.0
-bcrypt>=4.0.1
+bcrypt>=3.2.0,<4.1.0
+
+pyyaml
+requests
+# Local mode dependencies for story generation model
+# torch
+# transformers
+# peft
+# accelerate
+

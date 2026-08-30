@@ -9,16 +9,20 @@ if repo_root not in sys.path:
 
 try:
     import uvicorn
+    import email_validator
 except ImportError:
-    print("⚠️  'uvicorn' package is not installed. Installing dependencies...")
+    print("⚠️  Required dependencies are missing. Installing backend dependencies...")
     try:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "--prefer-binary", "-r", "requirements.txt"])
+        req_file = os.path.join(os.path.dirname(__file__), "requirements.txt")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "--prefer-binary", "-r", req_file])
         import uvicorn
+        import email_validator
         print("✅ Dependencies installed successfully!")
     except Exception as e:
         print(f"❌ Failed to auto-install dependencies: {e}")
-        print("Please run manually: python3 -m pip install --prefer-binary -r requirements.txt")
+        print("Please run manually: python -m pip install -r backend/requirements.txt")
         sys.exit(1)
+
 
 from app.main import app
 

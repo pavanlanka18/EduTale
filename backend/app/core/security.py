@@ -9,13 +9,16 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a plain password against the hashed password."""
-    pwd_bytes = plain_password.encode("utf-8")[:72]
-    return pwd_context.verify(pwd_bytes.decode("utf-8", errors="ignore"), hashed_password)
+    pwd = plain_password[:72]
+    return pwd_context.verify(pwd, hashed_password)
 
 def get_password_hash(password: str) -> str:
     """Generate a bcrypt password hash safely truncating to 72 bytes if needed."""
-    pwd_bytes = password.encode("utf-8")[:72]
-    return pwd_context.hash(pwd_bytes.decode("utf-8", errors="ignore"))
+    pwd = password[:72]
+    return pwd_context.hash(pwd)
+
+
+
 
 def create_access_token(
     subject: Union[str, Any], expires_delta: Optional[timedelta] = None

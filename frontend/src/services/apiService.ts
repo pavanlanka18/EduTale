@@ -211,6 +211,99 @@ class StorageService {
     return this.getStories().find(s => s.id === id) || MOCK_STORIES.find(s => s.id === id);
   }
 
+
+  // RAG Document Upload methods
+  async uploadDocumentFile(file: File): Promise<{ document_id: string; filename: string; chunk_count: number }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await fetch(`${API_BASE_URL}/api/v1/documents/upload`, {
+      method: 'POST',
+      body: formData,
+    });
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({ detail: 'Failed to upload document' }));
+      throw new Error(errData.detail || errData.error || 'Failed to upload document');
+    }
+    return response.json();
+  }
+
+  async uploadDocumentText(text: string): Promise<{ document_id: string; filename: string; chunk_count: number }> {
+    const formData = new FormData();
+    formData.append('text', text);
+    const response = await fetch(`${API_BASE_URL}/api/v1/documents/upload`, {
+      method: 'POST',
+      body: formData,
+    });
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({ detail: 'Failed to upload text' }));
+      throw new Error(errData.detail || errData.error || 'Failed to upload text');
+    }
+    return response.json();
+  }
+
+  async generateStoryWithRAG(payload: {
+    document_id: string | null;
+    topic: string;
+    profile: { age: number; grade: number; interest: string };
+  }): Promise<Story> {
+    const response = await fetch(`${API_BASE_URL}/api/v1/story/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to generate story with RAG');
+    }
+    const data = await response.json();
+    
+    const topicName = data.topic || payload.topic || "Educational Lesson";
+    const primaryInterest = payload.profile.interest || "animals";
+
+    const newStory: Story = {
+      id: `story-rag-${Date.now()}`,
+      title: `${topicName} Adventure`,
+      subtitle: `Generated with RAG from source material for Grade ${payload.profile.grade} learner.`,
+      objective: `Understand key concepts of ${topicName} via personalized narration.`,
+      conceptName: topicName,
+      learnerProfile: {
+        name: "Learner",
+        age: payload.profile.age,
+        grade: `Grade ${payload.profile.grade}`,
+        interests: [primaryInterest],
+      },
+      coverImage: "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1000&q=80",
+      readingTimeMinutes: 3,
+      gradeLevel: `Grade ${payload.profile.grade}`,
+      concepts: [
+        { name: topicName, description: `Core concepts retrieved from material.`, icon: "🌱" }
+      ],
+      scenes: [
+        {
+          id: 1,
+          title: `${topicName} Fundamentals`,
+          narration: typeof data.story === 'string' ? data.story : `Here is your custom story for ${topicName}.`,
+          visualDescription: `Illustrating ${topicName} with a theme of ${primaryInterest}.`,
+          imageUrl: "https://images.unsplash.com/photo-1511497584788-876761c119ef?auto=format&fit=crop&w=1000&q=80",
+          duration: 12,
+          conceptsHighlighted: [topicName],
+        }
+      ],
+      quiz: [
+        {
+          id: 'q1',
+          question: `What is the core theme of ${topicName}?`,
+          options: ["Balanced system interaction", "No input required", "Static state"],
+          correctAnswer: 0,
+          explanation: `Understanding ${topicName} relies on analyzing real-world interactions.`,
+        }
+      ],
+      createdAt: new Date().toISOString(),
+    };
+
+    this.saveStory(newStory);
+    return newStory;
+  }
+
   saveStory(story: Story): void {
     const stories = this.getStories();
     const existingIndex = stories.findIndex(s => s.id === story.id);
@@ -225,7 +318,7 @@ class StorageService {
   async generateCustomStory(profile: StudentProfile, material: LearningMaterial): Promise<Story> {
     try {
       // Attempt live call to FastAPI Backend API
-      const response = await fetch(`${API_BASE_URL}/lessons/create`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/lessons/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -359,7 +452,7 @@ class StorageService {
       formData.append('file', file);
       formData.append('student_id', studentId);
 
-      const response = await fetch(`${API_BASE_URL}/lessons/upload`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/lessons/upload`, {
         method: 'POST',
         body: formData
       });

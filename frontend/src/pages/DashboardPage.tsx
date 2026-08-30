@@ -37,7 +37,7 @@ export const DashboardPage: React.FC = () => {
             </p>
 
             <div className="pt-2 flex flex-wrap gap-3">
-              <Link to="/create/profile">
+              <Link to="/create/material">
                 <Button size="md" className="bg-white text-brand-900 hover:bg-slate-100" icon={<Plus className="w-4 h-4" />}>
                   Create New Story
                 </Button>
@@ -130,7 +130,7 @@ export const DashboardPage: React.FC = () => {
             <Card>
               <h3 className="text-sm font-bold text-slate-900 mb-3 flex items-center justify-between">
                 <span>Active Hobbies</span>
-                <Link to="/create/profile" className="text-xs text-brand-600 font-semibold hover:underline">Edit</Link>
+                <Link to="/profile" className="text-xs text-brand-600 font-semibold hover:underline">Edit</Link>
               </h3>
               <div className="flex flex-wrap gap-2">
                 {profile.interests.map((interestId) => {

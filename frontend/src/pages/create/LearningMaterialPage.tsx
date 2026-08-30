@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Upload, FileText, Image as ImageIcon, Type, Sparkles, CheckCircle, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Upload, FileText, Image as ImageIcon, Type, ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { ProgressStepper } from '../../components/ui/ProgressStepper';
 import { Badge } from '../../components/ui/Badge';
@@ -9,11 +9,10 @@ import { storageService } from '../../services/apiService';
 
 export const LearningMaterialPage: React.FC = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'pdf' | 'image' | 'text'>('pdf');
+  const [activeTab, setActiveTab] = useState<'pdf' | 'image' | 'text'>('text');
   const [pastedText, setPastedText] = useState(
     'Ecosystems rely on food chains to transfer energy between organisms. Producers like plants absorb solar light through photosynthesis. Primary consumers like herbivore zebras eat plants, and carnivore predators consume herbivores.'
   );
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [extractedData, setExtractedData] = useState<LearningMaterial | null>(null);
 
@@ -35,7 +34,6 @@ export const LearningMaterialPage: React.FC = () => {
   };
 
   const processFile = async (file: File) => {
-    setUploadedFile(file);
     setIsProcessing(true);
     const extracted = await storageService.uploadFileAndExtract(file);
     setIsProcessing(false);
@@ -51,47 +49,57 @@ export const LearningMaterialPage: React.FC = () => {
         name: 'Pasted Notes',
         content: pastedText,
         extractedTopic: 'Ecosystem Food Chains',
-        extractedConcepts: ['Photosynthesis', 'Primary Consumers', 'Secondary Carnivores', 'Ecosystem Balance']
+        extractedConcepts: ['Photosynthesis', 'Primary Consumers', 'Secondary Carnivores']
       });
-    }, 1200);
+    }, 800);
   };
 
-  const handleProceed = () => {
+  const handleNextStep = () => {
     const materialData: LearningMaterial = extractedData || {
       type: 'text',
-      name: 'Lesson Input',
+      name: 'Study Material',
       content: pastedText,
       extractedTopic: 'Ecosystem Food Chains',
       extractedConcepts: ['Producers', 'Consumers', 'Energy Flow']
     };
     sessionStorage.setItem('edutale_current_material', JSON.stringify(materialData));
-    navigate('/create/generating');
+    navigate('/create/material');
   };
 
   const steps = [
-    { id: 1, label: 'Profile' },
-    { id: 2, label: 'Material' },
-    { id: 3, label: 'Story AI' },
-    { id: 4, label: 'Learn' },
+    { id: 1, label: '1. Notes & Docs' },
+    { id: 2, label: '2. Topic & Profile' },
+    { id: 3, label: '3. Story AI' },
   ];
 
   return (
     <div className="min-h-screen bg-surface-bg py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-8">
-        <ProgressStepper steps={steps} currentStep={2} />
+        <ProgressStepper steps={steps} currentStep={1} />
 
         <div className="text-center max-w-2xl mx-auto space-y-3">
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900">
-            What are we learning today? 📚
+            Step 1: Upload Notes or Document 📄
           </h1>
           <p className="text-slate-600 text-sm sm:text-base">
-            Upload your textbook PDF, a photo of your notes, or paste direct text below.
+            Upload your textbook PDF, a photo of your classroom notes, or paste your lesson content below.
           </p>
         </div>
 
         {/* INPUT TABS */}
         <div className="bg-white rounded-3xl p-6 sm:p-8 border border-purple-100 shadow-xl space-y-6">
           <div className="flex p-1.5 bg-slate-100 rounded-2xl gap-2">
+            <button
+              type="button"
+              onClick={() => { setActiveTab('text'); setExtractedData(null); }}
+              className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${
+                activeTab === 'text' ? 'bg-white text-brand-700 shadow-md' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Type className="w-4 h-4" />
+              <span>Paste Notes</span>
+            </button>
+
             <button
               type="button"
               onClick={() => { setActiveTab('pdf'); setExtractedData(null); }}
@@ -111,22 +119,27 @@ export const LearningMaterialPage: React.FC = () => {
               }`}
             >
               <ImageIcon className="w-4 h-4" />
-              <span>Upload Photo (OCR)</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => { setActiveTab('text'); setExtractedData(null); }}
-              className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${
-                activeTab === 'text' ? 'bg-white text-brand-700 shadow-md' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Type className="w-4 h-4" />
-              <span>Paste Text</span>
+              <span>Photo / OCR</span>
             </button>
           </div>
 
-          {/* TAB 1 & 2: FILE UPLOAD ZONE */}
+          {/* TAB 1: TEXT EDITOR */}
+          {activeTab === 'text' && (
+            <div className="space-y-4">
+              <label className="block text-sm font-bold text-slate-800">
+                Paste study notes, textbook paragraphs, or key concepts:
+              </label>
+              <textarea
+                rows={6}
+                value={pastedText}
+                onChange={(e) => setPastedText(e.target.value)}
+                placeholder="Paste paragraph, notes, or chapter excerpt here..."
+                className="w-full p-4 rounded-2xl border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none text-slate-800 text-sm leading-relaxed"
+              />
+            </div>
+          )}
+
+          {/* TAB 2 & 3: FILE UPLOAD ZONE */}
           {(activeTab === 'pdf' || activeTab === 'image') && (
             <div
               onDragOver={handleDragOver}
@@ -143,10 +156,10 @@ export const LearningMaterialPage: React.FC = () => {
                 <Upload className="w-8 h-8" />
               </div>
               <h3 className="text-lg font-bold text-slate-800">
-                Drop your {activeTab === 'pdf' ? 'PDF textbook chapter' : 'textbook photo'} here
+                Drop your {activeTab === 'pdf' ? 'PDF document' : 'photo/image'} here
               </h3>
               <p className="text-xs text-slate-500 mt-1">
-                {activeTab === 'pdf' ? 'Supports PDF documents up to 25MB' : 'Supports JPG, PNG, WEBP with OCR extraction'}
+                {activeTab === 'pdf' ? 'Supports PDF textbook chapters' : 'OCR extracts text automatically from images'}
               </p>
               <div className="mt-4">
                 <span className="inline-flex items-center px-4 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 shadow-xs">
@@ -156,63 +169,13 @@ export const LearningMaterialPage: React.FC = () => {
             </div>
           )}
 
-          {/* TAB 3: TEXT EDITOR */}
-          {activeTab === 'text' && (
-            <div className="space-y-4">
-              <label className="block text-sm font-bold text-slate-800">
-                Paste your study notes or concept material:
-              </label>
-              <textarea
-                rows={5}
-                value={pastedText}
-                onChange={(e) => setPastedText(e.target.value)}
-                placeholder="Paste paragraph, notes, or chapter excerpt here..."
-                className="w-full p-4 rounded-2xl border border-slate-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none text-slate-800 text-sm leading-relaxed"
-              />
-              <div className="flex justify-end">
-                <Button size="md" variant="secondary" onClick={handleTextSubmit}>
-                  Analyze Text Content
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* PROCESSING ANIMATION STATE */}
+          {/* PROCESSING ANIMATION */}
           {isProcessing && (
-            <div className="bg-brand-50 rounded-2xl p-6 border border-brand-200 flex items-center gap-4 animate-pulse">
-              <div className="w-8 h-8 border-4 border-brand-600 border-t-transparent rounded-full animate-spin" />
+            <div className="bg-brand-50 rounded-2xl p-5 border border-brand-200 flex items-center gap-4 animate-pulse">
+              <div className="w-7 h-7 border-4 border-brand-600 border-t-transparent rounded-full animate-spin" />
               <div>
-                <p className="font-bold text-brand-900 text-sm">Extracting educational concepts...</p>
-                <p className="text-xs text-brand-700">Analyzing key topics and terminology for personalized RAG</p>
-              </div>
-            </div>
-          )}
-
-          {/* EXTRACTED RESULT BANNER */}
-          {extractedData && !isProcessing && (
-            <div className="bg-emerald-50 rounded-2xl p-6 border border-emerald-200 space-y-4 animate-in fade-in">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-emerald-800 font-bold text-base">
-                  <CheckCircle className="w-5 h-5 text-emerald-600" />
-                  <span>We found your lesson!</span>
-                </div>
-                <Badge color="mint" size="sm">{extractedData.name}</Badge>
-              </div>
-
-              <div>
-                <p className="text-xs text-slate-500 font-medium">Extracted Educational Topic:</p>
-                <h4 className="text-lg font-extrabold text-slate-900">{extractedData.extractedTopic}</h4>
-              </div>
-
-              <div>
-                <p className="text-xs text-slate-500 font-medium mb-2">Key Concepts Identified:</p>
-                <div className="flex flex-wrap gap-2">
-                  {extractedData.extractedConcepts?.map((concept, idx) => (
-                    <span key={idx} className="bg-white px-3 py-1 rounded-xl text-xs font-semibold text-slate-700 border border-emerald-200 shadow-2xs">
-                      ✨ {concept}
-                    </span>
-                  ))}
-                </div>
+                <p className="font-bold text-brand-900 text-sm">Processing learning document...</p>
+                <p className="text-xs text-brand-700">Chunking & extracting key material for RAG vector retrieval</p>
               </div>
             </div>
           )}
@@ -223,19 +186,19 @@ export const LearningMaterialPage: React.FC = () => {
               type="button"
               variant="outline"
               size="md"
-              onClick={() => navigate('/create/profile')}
+              onClick={() => navigate('/dashboard')}
               icon={<ArrowLeft className="w-4 h-4" />}
               iconPosition="left"
             >
-              Back
+              Cancel
             </Button>
 
             <Button
               size="lg"
-              onClick={handleProceed}
+              onClick={handleNextStep}
               icon={<ArrowRight className="w-5 h-5" />}
             >
-              Looks Good → Create Story
+              Next: Topic & Profile →
             </Button>
           </div>
 

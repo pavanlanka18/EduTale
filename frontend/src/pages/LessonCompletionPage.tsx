@@ -160,7 +160,7 @@ export const LessonCompletionPage: React.FC = () => {
               </Button>
             )}
 
-            <Link to="/create/profile">
+            <Link to="/create/material">
               <Button size="lg" variant="outline" icon={<Sparkles className="w-5 h-5" />}>
                 Create Another Story
               </Button>

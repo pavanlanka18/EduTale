@@ -3,8 +3,8 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { LandingPage } from './pages/LandingPage';
+import { CreateStoryWizard } from './pages/create/CreateStoryWizard';
 import { StudentProfilePage } from './pages/create/StudentProfilePage';
-import { LearningMaterialPage } from './pages/create/LearningMaterialPage';
 import { GeneratingPage } from './pages/create/GeneratingPage';
 import { StoryPreviewPage } from './pages/create/StoryPreviewPage';
 import { LearnPlayerPage } from './pages/LearnPlayerPage';
@@ -28,8 +28,10 @@ export default function App() {
           <Route path="/" element={<LandingPage />} />
           
           {/* CREATE STORY WIZARD ROUTES */}
+          <Route path="/create" element={<CreateStoryWizard />} />
+          <Route path="/create/material" element={<CreateStoryWizard />} />
+          <Route path="/profile" element={<StudentProfilePage />} />
           <Route path="/create/profile" element={<StudentProfilePage />} />
-          <Route path="/create/material" element={<LearningMaterialPage />} />
           <Route path="/create/generating" element={<GeneratingPage />} />
           <Route path="/create/preview/:id" element={<StoryPreviewPage />} />
           <Route path="/story/:id" element={<StoryPreviewPage />} />
@@ -49,3 +51,4 @@ export default function App() {
     </div>
   );
 }
+
